@@ -205,6 +205,7 @@ because the path parameter item_id had a value of "foo", which is not an int.
 When you declare other function parameters that are not part of the path parameters, they are automatically interpreted as "query" parameters.
 
 ```python
+from typing import Union
 from fastapi import FastAPI
 
 app = FastAPI()
