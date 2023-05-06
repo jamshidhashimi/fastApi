@@ -33,9 +33,23 @@ and then:
 
 `pip install "uvicorn[standard]"`
 
+## Why we need uvicorn?
+
+Uvicorn is a high-performance ASGI server that is commonly used to run FastAPI applications. Here's why we need Uvicorn to run FastAPI:
+
+- ASGI Compatibility: FastAPI is built on top of the ASGI (Asynchronous Server Gateway Interface) specification, which is an emerging standard for building Python web applications. Uvicorn is designed specifically to support ASGI, making it a suitable server for running FastAPI.
+
+- Concurrency and Performance: Uvicorn is built using the powerful asyncio library in Python, which allows it to handle high levels of concurrency and provide excellent performance. FastAPI, being an asynchronous web framework, can take full advantage of Uvicorn's concurrency capabilities to handle multiple requests simultaneously.
+
+- WebSocket Support: Uvicorn has built-in support for WebSockets, which are a key feature in many modern web applications. FastAPI provides WebSocket functionality, and Uvicorn allows you to seamlessly integrate and run WebSocket-enabled endpoints alongside your regular HTTP endpoints.
+
+- Development and Production Environment: Uvicorn provides useful features for both development and production environments. It supports automatic code reloading during development, allowing you to see instant changes without restarting the server. In production, Uvicorn can be configured to handle multiple workers, enabling your FastAPI application to scale and handle a high volume of concurrent requests.
+
 ## First Example
 
-```
+Create a file `main.py` and write the following:
+
+```python
 from fastapi import FastAPI
 
 app = FastAPI()
@@ -43,4 +57,172 @@ app = FastAPI()
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+```
+
+Then run it live server:
+`uvicorn main:app --reload`
+
+The command `uvicorn main:app` refers to:
+
+- main: the file main.py (the Python "module").
+- app: the object created inside of main.py with the line app = FastAPI().
+- --reload: make the server restart after code changes. Only use for development.
+
+**See it live**
+Open your browser at `http://127.0.0.1:8000` and you should see:
+`{"message": "Hello World"}`
+
+Let's see in detail on what's happening here:
+
+1. from fastapi import FastAPI: This line imports the FastAPI class from the fastapi module. FastAPI is a framework for building APIs with Python.
+
+2. app = FastAPI(): This line creates an instance of the FastAPI class and assigns it to the variable app. This app object will be used to define the routes and handlers for our API.
+
+3. @app.get("/"): This is a decorator that associates the following function with the root URL ("/") of the API. In this case, it is used for handling HTTP GET requests to the root URL.
+
+4. async def root():: This line defines an asynchronous function named root, which will handle requests to the root URL ("/").
+
+5. return {"message": "Hello World"}: This line is the body of the root function. It returns a dictionary containing a single key-value pair: "message" as the key and "Hello World" as the value. This dictionary will be converted to JSON format and sent as the response to the client when the root URL is accessed.
+
+**Interactive API docs**
+Now go to `http://127.0.0.1:8000/docs`.
+
+You will see the automatic interactive API documentation (provided by Swagger UI)
+
+**Alternative API docs**
+And now, go to `http://127.0.0.1:8000/redoc`.
+
+You will see the alternative automatic documentation (provided by ReDoc)
+
+**OpenAPI**
+
+FastAPI generates a "schema" with all your API using the OpenAPI standard for defining APIs. OpenAPI is a specification that dictates how to define a schema of your API.
+
+This schema definition includes your API paths, the possible parameters they take, etc. If you are curious about how the raw OpenAPI schema looks like, FastAPI automatically generates a JSON (schema) with the descriptions of all your API.
+
+You can see it directly at: `http://127.0.0.1:8000/openapi.json`
+
+**Path or Endpoint Operation**
+"Path" here refers to the last part of the URL starting from the first `/`.
+
+So, in a URL like:
+
+`https://example.com/items/foo`
+...the path would be:
+
+`/items/foo`
+
+While building an API, the "path" is the main way to separate "concerns" and "resources".
+
+**Operation**
+
+"Operation" here refers to one of the HTTP "methods".
+
+When building APIs, you normally use these specific HTTP methods to perform a specific action.
+
+Normally you use:
+
+```
+POST: to create data.
+GET: to read data.
+PUT: to update data.
+DELETE: to delete data.
+```
+
+So, in OpenAPI, each of the HTTP methods is called an "operation".
+
+We are going to call them "operations" too.
+
+The `@app.get("/")` tells FastAPI that the function right below is in charge of handling requests that go to:
+
+- the path /
+- using a get operation
+
+You can also use the other operations:
+
+```
+@app.post()
+@app.put()
+@app.delete()
+```
+
+## Path Parameters
+
+You can declare path "parameters" or "variables" with the same syntax used by Python format strings:
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/items/{item_id}")
+async def read_item(item_id):
+    return {"item_id": item_id}
+```
+
+The value of the path parameter item_id will be passed to your function as the argument item_id.
+
+**Path parameters with types**
+
+You can declare the type of a path parameter in the function, using standard Python type annotations:
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/items/{item_id}")
+async def read_item(item_id: int):
+    return {"item_id": item_id}
+```
+
+In this case, item_id is declared to be an int.
+
+**Data validation**
+But if you go to the browser at http://127.0.0.1:8000/items/foo, you will see a nice HTTP error of:
+
+```
+{
+    "detail": [
+        {
+            "loc": [
+                "path",
+                "item_id"
+            ],
+            "msg": "value is not a valid integer",
+            "type": "type_error.integer"
+        }
+    ]
+}
+```
+
+because the path parameter item_id had a value of "foo", which is not an int.
+
+## Query Parameters
+
+When you declare other function parameters that are not part of the path parameters, they are automatically interpreted as "query" parameters.
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+student = {'id': 1, 'name': 'Jean', 'age': 25, 'year': '3'}
+
+
+@app.get("/students/")
+async def get_students(id: int, name: Union[str, None] = None):
+
+    if id and name and student.get('id') == id and student.get('name') == name:
+        return student
+
+    if student.get('id') == id:
+        return student
+
+    if student.get('name') == name:
+        return student
+
+    return {"message": "Data not found"}
 ```
