@@ -1,6 +1,7 @@
 import urllib3
 import rich
 
-resp = urllib3.request('GET', 'https://openlibrary.org/search/authors.json?q=adam grant')
-result = resp.json()
+http = urllib3.PoolManager()
+response = http.request('GET', 'https://openlibrary.org/search/authors.json?q=adam%20grant')
+result = response.data.decode('utf-8')
 rich.print(result)
