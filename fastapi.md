@@ -6,6 +6,8 @@ API stands for Application Programming Interface and it is a way for one program
 
 HTTP APIs (Application Programming Interfaces) are interfaces that allow communication and interaction between different software systems over the HTTP (Hypertext Transfer Protocol) protocol. They enable applications to send requests and receive responses to perform various operations, exchange data, and access resources over the internet.
 
+In the following example, we will be using the Open Library API here: https://openlibrary.org/developers/api
+
 ```python
 import urllib3
 
@@ -45,14 +47,14 @@ By leveraging the performance benefits of Starlette and Pydantic, FastAPI is con
 
 Key features in summary:
 
-- Fast: Very high performance. One of the fastest Python frameworks available.
-- Fast to code: Increase the speed to develop features by about 200% to 300%.
-- Fewer bugs: Reduce about 40% of human (developer) induced errors.
-- Intuitive: Great editor support. Completion everywhere. Less time debugging.
-- Easy: Designed to be easy to use and learn. Less time reading docs.
-- Short: Minimize code duplication. Multiple features from each parameter declaration. Fewer bugs.
-- Robust: Get production-ready code. With automatic interactive documentation.
-- Standards-based: Based on (and fully compatible with) the open standards for APIs: OpenAPI (previously known as Swagger) and JSON Schema.
+- Fast: One of the fastest Python frameworks available, providing high performance.
+- Fast to code: Increases development speed by 200% to 300%.
+- Fewer bugs: Reduces human-induced errors by about 40%.
+- Intuitive: Excellent editor support, autocomplete, and reduced debugging time.
+- Easy: Designed for ease of use and quick learning, minimizing the need for extensive documentation.
+- Short: Minimizes code duplication and maximizes functionality per parameter declaration, leading to fewer bugs.
+- Robust: Produces production-ready code with automatic interactive documentation.
+- Standards-based: Built on open standards for APIs like OpenAPI (previously Swagger) and JSON Schema, ensuring compatibility.
 
 # Setup
 
@@ -68,9 +70,9 @@ and then:
 
 ## Why we need uvicorn?
 
-Uvicorn is a high-performance ASGI server that is commonly used to run FastAPI applications. Here's why we need Uvicorn to run FastAPI:
+Uvicorn is a high-performance ASGI ((Asynchronous Server Gateway Interface)) server that is commonly used to run FastAPI applications. Here's why we need Uvicorn to run FastAPI:
 
-- ASGI Compatibility: FastAPI is built on top of the ASGI (Asynchronous Server Gateway Interface) specification, which is an emerging standard for building Python web applications. Uvicorn is designed specifically to support ASGI, making it a suitable server for running FastAPI.
+- ASGI Compatibility: FastAPI is built on top of the ASGI specification, which is an emerging standard for building Python web applications. Uvicorn is designed specifically to support ASGI, making it a suitable server for running FastAPI.
 
 - Concurrency and Performance: Uvicorn is built using the powerful asyncio library in Python, which allows it to handle high levels of concurrency and provide excellent performance. FastAPI, being an asynchronous web framework, can take full advantage of Uvicorn's concurrency capabilities to handle multiple requests simultaneously.
 
@@ -92,7 +94,7 @@ async def root():
     return {"message": "Hello World"}
 ```
 
-Then run it live server:
+Then run it in the live server:
 `uvicorn main:app --reload`
 
 The command `uvicorn main:app` refers to:
@@ -107,15 +109,15 @@ Open your browser at `http://127.0.0.1:8000` and you should see:
 
 Let's see in detail on what's happening here:
 
-1. from fastapi import FastAPI: This line imports the FastAPI class from the fastapi module. FastAPI is a framework for building APIs with Python.
+1. `from fastapi import FastAPI`: This line imports the FastAPI class from the fastapi module. FastAPI is a framework for building APIs with Python.
 
-2. app = FastAPI(): This line creates an instance of the FastAPI class and assigns it to the variable app. This app object will be used to define the routes and handlers for our API.
+2. `app = FastAPI()`: This line creates an instance of the FastAPI class and assigns it to the variable app. This app object will be used to define the routes and handlers for our API.
 
-3. @app.get("/"): This is a decorator that associates the following function with the root URL ("/") of the API. In this case, it is used for handling HTTP GET requests to the root URL.
+3. `@app.get("/")`: This is a decorator that associates the following function with the root URL ("/") of the API. In this case, it is used for handling HTTP GET requests to the root URL.
 
-4. async def root():: This line defines an asynchronous function named root, which will handle requests to the root URL ("/").
+4. `async def root()`: This line defines an asynchronous function named root, which will handle requests to the root URL ("/").
 
-5. return {"message": "Hello World"}: This line is the body of the root function. It returns a dictionary containing a single key-value pair: "message" as the key and "Hello World" as the value. This dictionary will be converted to JSON format and sent as the response to the client when the root URL is accessed.
+5. `return {"message": "Hello World"}`: This line is the body of the root function. It returns a dictionary containing a single key-value pair: "message" as the key and "Hello World" as the value. This dictionary will be converted to JSON format and sent as the response to the client when the root URL is accessed.
 
 **Interactive API docs**
 Now go to `http://127.0.0.1:8000/docs`.
