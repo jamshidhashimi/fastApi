@@ -1,3 +1,36 @@
+# What is an API
+
+API stands for Application Programming Interface and it is a way for one program to talk to another program.
+
+# HTTP APIs
+
+HTTP APIs (Application Programming Interfaces) are interfaces that allow communication and interaction between different software systems over the HTTP (Hypertext Transfer Protocol) protocol. They enable applications to send requests and receive responses to perform various operations, exchange data, and access resources over the internet.
+
+```python
+import urllib3
+
+resp = urllib3.request('GET', 'https://openlibrary.org/search/authors.json?q=adam grant')
+result = resp.json()
+print(result)
+```
+
+Make sure you have urllib3 installed. You can install it by running the following command:
+`python -m pip install urllib3`
+
+**Formatting CLI output**
+
+```python
+import urllib3
+import rich
+
+resp = urllib3.request('GET', 'https://openlibrary.org/search/authors.json?q=adam grant')
+result = resp.json()
+rich.print(result)
+```
+
+Make sure you have urllib3 installed. You can install it by running the following command:
+`python -m pip install rich`
+
 # What is FastApi
 
 FastAPI is a modern, fast (high-performance), web framework for building APIs with Python 3.7+ based on standard Python type hints.
@@ -227,3 +260,19 @@ async def get_students(id: int, name: Union[str, None] = None):
 
     return {"message": "Data not found"}
 ```
+
+**Optional parameters**
+
+The same way, you can declare optional query parameters, by setting their default to `None`.
+
+**Required query parameters**
+
+When you declare a default value for non-path parameters (for now, we have only seen query parameters), then it is not required.
+
+If you don't want to add a specific value but just make it optional, set the default as None.
+
+But when you want to make a query parameter required, you can just not declare any default value
+
+# Resources
+
+https://fastapi.tiangolo.com

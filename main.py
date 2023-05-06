@@ -3,9 +3,6 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
-#For query parameters
-student = {'id': 1, 'name': 'Jean', 'age': 25, 'year': '3'}
-
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
@@ -25,6 +22,8 @@ async def read_item(book_id: int):
 @app.get("/students/")
 async def get_students(id: int, name: Union[str, None] = None):
     
+    student = {'id': 1, 'name': 'Jean', 'age': 25, 'year': '3'}
+
     if id and name and student.get('id') == id and student.get('name') == name:
         return student
     
