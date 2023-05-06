@@ -11,9 +11,10 @@ In the following example, we will be using the Open Library API here: https://op
 ```python
 import urllib3
 
-resp = urllib3.request('GET', 'https://openlibrary.org/search/authors.json?q=adam grant')
-result = resp.json()
-print(result)
+http = urllib3.PoolManager()
+response = http.request('GET', 'https://openlibrary.org/search/authors.json?q=adam%20grant')
+result = response.data.decode('utf-8')
+print(result) 
 ```
 
 Make sure you have urllib3 installed. You can install it by running the following command:
@@ -25,9 +26,10 @@ Make sure you have urllib3 installed. You can install it by running the followin
 import urllib3
 import rich
 
-resp = urllib3.request('GET', 'https://openlibrary.org/search/authors.json?q=adam grant')
-result = resp.json()
-rich.print(result)
+http = urllib3.PoolManager()
+response = http.request('GET', 'https://openlibrary.org/search/authors.json?q=adam%20grant')
+result = response.data.decode('utf-8')
+rich.print(result) 
 ```
 
 Make sure you have urllib3 installed. You can install it by running the following command:
